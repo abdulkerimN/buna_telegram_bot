@@ -1,8 +1,10 @@
 # Buna bot
 ### Made with Python and BotFather
 <img width="960" height="418" alt="buna_bot" src="https://github.com/user-attachments/assets/aee2b0ab-7a3a-44cb-8f88-80edaa436d1a" />
+
 ### I have used API token from BotFather,
 ### I have used Python to customize the bot, add commands and make it to work in groups after giving it admin permission
+
 <img width="293" height="467" alt="Screenshot 2025-10-24 020429" src="https://github.com/user-attachments/assets/c4c5dccd-9466-4c1e-a311-7a04af5b6829" />
 
 ### try it with the link [@bunaet_bot](https://t.me/bunaet_bot)
