@@ -14,7 +14,8 @@
 ####   source venv/Scripts/activate   # Git Bash
 #### 3. Install dependencies: pip install -r requirements.txt
 #### 4. Add your bot token: Create a .env file in the project root with the following content
-####       BOT_TOKEN=your_bot_token_here     BOT_USERNAME=@your_bot_username_here
+####     BOT_TOKEN=your_bot_token_here  
+####     BOT_USERNAME=@your_bot_username_here
 #### 5. Run the bot: python bot.py
 
 
