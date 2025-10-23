@@ -9,6 +9,7 @@
 
 ### try it with the link [@bunaet_bot](https://t.me/bunaet_bot)
 
+  ###                   The SetUp
 #### 1. Clone the repo: git clone https://github.com/yourusername/Telegram-Bot.git
 #### 2. Create a virtual environment and activate it: python -m venv venv
 ####   source venv/Scripts/activate   # Git Bash
