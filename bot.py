@@ -1,27 +1,25 @@
-<<<<<<< HEAD
+
 import os
-=======
->>>>>>> 8bb60951b4d3373346df001aef1a006b46521a3f
+
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes,MessageHandler, filters
 
 from dotenv import load_dotenv
-<<<<<<< HEAD
+
 # import os
 
 # load_dotenv()
 
 TOKEN: Final = os.getenv("TOKEN")
 BOT_USERNAME: Final = os.getenv("@bunaet_bot")   # replace with your bot's username
-=======
+
 import os
 
 load_dotenv()
 
 TOKEN: Final = os.getenv("TOKEN")
 BOT_USERNAME: Final = "@bunaet_bot"  # replace with your bot's username
->>>>>>> 8bb60951b4d3373346df001aef1a006b46521a3f
 
 # commands
 
