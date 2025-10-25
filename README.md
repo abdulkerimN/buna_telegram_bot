@@ -19,7 +19,7 @@
   ###                   The SetUp
 #### 1. Clone the repo: git clone https://github.com/yourusername/Telegram-Bot.git
 #### 2. Create a virtual environment and activate it: python -m venv venv
-####   source venv/Scripts/activate   # Git Bash
+####           source venv/Scripts/activate   
 #### 3. Install dependencies: pip install -r requirements.txt
 #### 4. Add your bot token: Create a .env file in the project root with the following content
 ####     BOT_TOKEN=your_bot_token_here  
