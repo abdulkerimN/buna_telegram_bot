@@ -1,88 +1,212 @@
-
+import logging
 import os
-
+import re
 from typing import Final
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes,MessageHandler, filters
 
 from dotenv import load_dotenv
+from telegram import Update
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
 
-# import os
 
-# load_dotenv()
-
-TOKEN: Final = os.getenv("TOKEN")
-BOT_USERNAME: Final = os.getenv("@bunaet_bot")   # replace with your bot's username
-
-import os
-
+# Load environment variables from the .env file
 load_dotenv()
 
-TOKEN: Final = os.getenv("TOKEN")
-BOT_USERNAME: Final = "@bunaet_bot"  # replace with your bot's username
+TOKEN: Final[str | None] = os.getenv("TOKEN")
+BOT_USERNAME: Final[str] = os.getenv(
+    "BOT_USERNAME", "@bunaet_bot"
+).strip()
 
-# commands
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("selam! I am buna bot")
-    
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("How can I help you today?")
-    
-async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("this is custom command")
-    
-# handle responses
+# Configure logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
+
+logger = logging.getLogger(__name__)
+
+
+# -------------------------
+# COMMAND HANDLERS
+# -------------------------
+
+async def start_command(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+) -> None:
+    message = update.effective_message
+
+    if message is None:
+        return
+
+    await message.reply_text(
+        "Selam! 👋\n"
+        "I'm Buna, your student academic assistant.\n\n"
+        "I'm being developed to help students organize "
+        "their academic activities.\n\n"
+        "Use /help to see the available commands."
+    )
+
+
+async def help_command(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+) -> None:
+    message = update.effective_message
+
+    if message is None:
+        return
+
+    await message.reply_text(
+        "Here are my available commands:\n\n"
+        "/start - Start the bot\n"
+        "/help - Show this help message\n"
+        "/custom - Test a custom command\n\n"
+        "You can also send me simple messages."
+    )
+
+
+async def custom_command(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+) -> None:
+    message = update.effective_message
+
+    if message is None:
+        return
+
+    await message.reply_text("This is a custom command!")
+
+
+# -------------------------
+# TEXT RESPONSE LOGIC
+# -------------------------
+
 def handle_response(text: str) -> str:
     text = text.lower()
-  
+
     if "hello" in text:
-        return "hey there!"
+        return "Hey there!"
+
     if "how are you" in text:
         return "I'm good, thanks for asking!"
+
     if "bye" in text:
-        return "see you later!"
-    return "I don't understand you."
+        return "See you later!"
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message_type = update.message.chat.type
-    text = update.message.text
-    
-    print(f'User ({update.message.chat.id}) in {message_type}: "{text}"')
+    return "I don't understand you yet."
 
-    if message_type == "group":
-        if BOT_USERNAME in text:
-            new_text: str = text.replace(BOT_USERNAME, "").strip()
-            response: str = handle_response(new_text)
-        else:
+
+# -------------------------
+# MESSAGE HANDLER
+# -------------------------
+
+async def handle_message(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+) -> None:
+    message = update.effective_message
+    chat = update.effective_chat
+
+    if message is None or chat is None or message.text is None:
+        return
+
+    text = message.text
+
+    logger.info(
+        'User %s in %s: "%s"',
+        update.effective_user.id if update.effective_user else "Unknown",
+        chat.type,
+        text,
+    )
+
+    # In groups, respond only when the bot is mentioned
+    # or someone replies directly to one of its messages.
+    if chat.type in ("group", "supergroup"):
+
+        is_mentioned = BOT_USERNAME.lower() in text.lower()
+
+        is_reply_to_bot = (
+            message.reply_to_message is not None
+            and message.reply_to_message.from_user is not None
+            and message.reply_to_message.from_user.id == context.bot.id
+        )
+
+        if not is_mentioned and not is_reply_to_bot:
             return
-    else:
-      response: str = handle_response(text)
 
-    print("Bot:", response)
-    await update.message.reply_text(response)
+        # Remove the bot's username before processing the message.
+        if is_mentioned:
+            text = re.sub(
+                re.escape(BOT_USERNAME),
+                "",
+                text,
+                flags=re.IGNORECASE,
+            ).strip()
+
+    response = handle_response(text)
+
+    logger.info("Bot response: %s", response)
+
+    await message.reply_text(response)
 
 
-async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f"Update {update} caused error {context.error}")
-    
+# -------------------------
+# ERROR HANDLER
+# -------------------------
 
-if __name__== "__main__":
-    print("starting bot...")
-    app = Application.builder().token(TOKEN).build()
-    
+async def error_handler(
+    update: object,
+    context: ContextTypes.DEFAULT_TYPE,
+) -> None:
+    logger.error(
+        "An error occurred while processing an update: %s",
+        context.error,
+    )
 
-    # commands
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("custom", custom_command))
-    
-    # messages
-    app.add_handler(MessageHandler(filters.TEXT, handle_message))
-    
-    # errors
-    app.add_error_handler(error)
-    
-    # polls the bot
-    print("bot started")
-    app.run_polling(poll_interval=3)
+
+# -------------------------
+# MAIN APPLICATION
+# -------------------------
+
+def main() -> None:
+
+    # Make sure the Telegram token exists.
+    if not TOKEN:
+        raise RuntimeError(
+            "TOKEN is missing. Add TOKEN=your_bot_token "
+            "to your .env file."
+        )
+
+    application = Application.builder().token(TOKEN).build()
+
+    # Register commands
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("custom", custom_command))
+
+    # Register text messages, excluding commands.
+    application.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            handle_message,
+        )
+    )
+
+    # Register error handler
+    application.add_error_handler(error_handler)
+
+    logger.info("Starting Buna bot...")
+
+    # Start polling Telegram for updates.
+    application.run_polling(poll_interval=3)
+
+
+if __name__ == "__main__":
+    main()
