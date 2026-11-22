@@ -1,29 +1,104 @@
-# Buna bot
-### Made with Python and BotFather
+# Buna Mini Bot 📚🌟
 
-### I have used API token from BotFather,
-### I have used Python to customize the bot, add commands and make it to work in groups after giving it admin permission
+A simple Telegram study companion built with Python. Buna Mini Bot helps students stay motivated and improve their study habits through random study tips and motivational messages.
 
-### try it with the link [@bunaet_bot](https://t.me/bunaet_bot)
+**Try the bot:** [@bunaet_bot](https://t.me/bunaet_bot)
 
+![Buna Mini Bot](buna_bot_profile.jpg)
 
-<img width="960" height="418" alt="buna_bot" src="https://github.com/user-attachments/assets/aee2b0ab-7a3a-44cb-8f88-80edaa436d1a" />
+## Features
 
-### I have used API token from BotFather,
-### I have used Python to customize the bot, add commands and make it to work in groups after giving it admin permission
+- `/start` — Start the bot and display the main menu.
+- `/help` — Show available commands and instructions.
+- `/tip` — Receive a random study tip.
+- `/motivate` — Receive a random motivational message.
+- **Reply keyboard** — Easily access bot features using buttons.
+- **Another button** — Get a different random tip or motivational message without sending a new command.
 
-<img width="293" height="467" alt="Screenshot 2025-10-24 020429" src="https://github.com/user-attachments/assets/c4c5dccd-9466-4c1e-a311-7a04af5b6829" />
+## Technologies Used
 
-### try it with the link [@bunaet_bot](https://t.me/bunaet_bot)
+- Python
+- python-telegram-bot
+- python-dotenv
 
-  ###                   The SetUp
-#### 1. Clone the repo: git clone https://github.com/yourusername/Telegram-Bot.git
-#### 2. Create a virtual environment and activate it: python -m venv venv
-####           source venv/Scripts/activate   
-#### 3. Install dependencies: pip install -r requirements.txt
-#### 4. Add your bot token: Create a .env file in the project root with the following content
-####     BOT_TOKEN=your_bot_token_here  
-####     BOT_USERNAME=@your_bot_username_here
-#### 5. Run the bot: python bot.py
+## Project Structure
 
+```text
+Telegram-Bot/
+│
+├── bot.py                  # Main bot application
+├── messages.py             # Study tips and motivational messages
+├── buna_bot_profile.jpg    # Bot profile picture
+├── requirements.txt        # Python dependencies
+├── .env                    # Environment variables
+├── .gitignore              # Git ignored files
+├── Procfile                # Process configuration
+└── README.md               # Project documentation
+```
 
+## Setup and Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Telegram-Bot.git
+cd Telegram-Bot
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+
+For Git Bash on Windows:
+
+```bash
+source .venv/Scripts/activate
+```
+
+### 4. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 5. Configure environment variables
+
+Create a `.env` file in the project root directory:
+
+```env
+TOKEN=your_telegram_bot_token
+BOT_USERNAME=@your_bot_username
+```
+
+Replace the placeholder values with your own bot credentials.
+
+**Important:** Never share your bot token or commit your `.env` file to GitHub.
+
+### 6. Run the bot
+
+```bash
+python bot.py
+```
+
+## Available Commands
+
+| Command | Description |
+|---|---|
+| `/start` | Start the bot |
+| `/help` | Display help information |
+| `/tip` | Get a random study tip |
+| `/motivate` | Get a motivational message |
+
+## How It Works
+
+Buna Mini Bot uses predefined lists of study tips and motivational messages stored in `messages.py`. Whenever a user requests a tip or motivation, Python randomly selects a message from the corresponding list.
+
+The project does not require a database or AI API.
+
+---
+
+**Made with Python ❤️**
