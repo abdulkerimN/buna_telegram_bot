@@ -4,7 +4,7 @@ A simple Telegram study companion built with Python. Buna Mini Bot helps student
 
 **Try the bot:** [@bunaet_bot](https://t.me/bunaet_bot)
 
-![Buna Mini Bot](buna_bot_profile.jpg)
+![Buna Mini Bot](avatar.jpg)
 
 ## Features
 
